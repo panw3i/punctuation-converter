@@ -49,12 +49,12 @@ export default function Home() {
     const handleConvert = () => {
         let convertedText = inputRef.current?.value || '';
 
-        // 先转换书名号
-        convertedText = convertedText.replace(/<([^>]*)>/g, '《$1》');
+        // 首先替换连续的尖括号
+        convertedText = convertedText.replace(/<<([^>]*)>>/g, '《$1》');
 
-        // 再转换其他标点
+        // 然后转换其他标点
         Object.keys(punctuationsMap).forEach(punc => {
-            if (punc !== '<' && punc !== '>') { // 排除已经处理过的书名号
+            if (punc !== '<' && punc !== '>') {
                 const regex = new RegExp(`\\${punc}`, 'g'); // 创建正则表达式，注意转义字符
                 convertedText = convertedText.replace(regex, punctuationsMap[punc]);
             }
@@ -62,6 +62,7 @@ export default function Home() {
 
         setOutput(convertedText);
     };
+
 
 
     const handleCopy = () => {
